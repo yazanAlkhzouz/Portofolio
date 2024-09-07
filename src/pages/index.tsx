@@ -38,8 +38,16 @@ const portfolioData = {
     }
   ]
 };
+interface ImageGalleryProps {
+  images: string[];
+  currentIndex: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}
 
-const ImageGallery = ({ images, currentIndex, onClose, onPrev, onNext }) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, currentIndex, onClose, onPrev, onNext }) => {
+
   return (
     <div className={styles.galleryOverlay}>
       <div className={styles.galleryModal}>
