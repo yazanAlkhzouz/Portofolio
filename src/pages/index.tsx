@@ -46,6 +46,14 @@ interface ImageGalleryProps {
   onNext: () => void;
 }
 
+
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  gallery: string[];
+}
+
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images, currentIndex, onClose, onPrev, onNext }) => {
 
   return (
@@ -69,12 +77,11 @@ const ContactForm = () => {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { // Specify the type for 'e'
     e.preventDefault();
     console.log('Form submitted:', { name, email, message });
     setSubmitted(true);
   };
-
   return (
     <div className={styles.contactFormContainer}>
       {submitted ? (
@@ -122,8 +129,9 @@ const ContactForm = () => {
 
 export default function Home() {
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const [currentProject, setCurrentProject] = useState(null);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null); // Specify the type for 'currentProject'
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -140,7 +148,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const openGallery = (project, index) => {
+  const openGallery = (project: Project, index: number) => { // Specify types for 'project' and 'index'
     setCurrentProject(project);
     setCurrentImageIndex(index);
     setGalleryOpen(true);
@@ -153,9 +161,11 @@ export default function Home() {
   };
 
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex < currentProject.gallery.length - 1 ? prevIndex + 1 : prevIndex
-    );
+    if (currentProject) { // Add a null check here
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex < currentProject.gallery.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    }
   };
 
   const prevImage = () => {
